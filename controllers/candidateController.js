@@ -1,11 +1,11 @@
-const { createCandidate, getCandidatesByInterviewer,updateCandidateById, deleteCandidateById } = require('../models/candidateModel');
+const { createCandidate, getCandidatesByInterviewer,getSingleCandidatesByInterviewer,updateCandidateById, deleteCandidateById } = require('../models/candidateModel');
 
 const addCandidate = async (req, res) => {
-  const { name, email, phone_no, status_id } = req.body;
+  const { name, email, phone_no, status_id,date } = req.body;
   const interviewer_id = req.user.id; // From auth middleware
 
   try {
-    const candidate = await createCandidate(name, email, phone_no, status_id, interviewer_id);
+    const candidate = await createCandidate(name, email, phone_no, status_id, interviewer_id,date);
     res.status(201).json({ candidate });
   } catch (err) {
     res.status(400).json({ message: 'Error adding candidate', error: err });
@@ -22,13 +22,25 @@ const getCandidates = async (req, res) => {
     res.status(400).json({ message: 'Error fetching candidates', error: err });
   }
 };
+
+const getSingleCandidates = async (req, res) => {
+  const interviewer_id = req.user.id;
+  const candidate_id = req.params.id;
+
+  try {
+    const candidates = await getSingleCandidatesByInterviewer(interviewer_id,candidate_id);
+    res.json(candidates);
+  } catch (err) {
+    res.status(400).json({ message: 'Error fetching candidates', error: err });
+  }
+};
 // Update a candidate by ID
 const updateCandidate = async (req, res) => {
   const { id } = req.params;
-  const { name, email, phone_no, status_id } = req.body;
+  const { name, email, phone_no, status_id,date } = req.body;
 
   try {
-    const candidate = await updateCandidateById(id, { name, email, phone_no, status_id });
+    const candidate = await updateCandidateById(id, { name, email, phone_no, status_id,date });
     if (!candidate) return res.status(404).json({ message: 'Candidate not found' });
     res.json(candidate);
   } catch (err) {
@@ -49,4 +61,4 @@ const deleteCandidate = async (req, res) => {
   }
 };
 
-module.exports = { addCandidate, getCandidates,updateCandidate, deleteCandidate };
+module.exports = { addCandidate, getCandidates,updateCandidate, getSingleCandidates,deleteCandidate };

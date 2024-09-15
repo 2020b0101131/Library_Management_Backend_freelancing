@@ -15,8 +15,9 @@ const createQuestionHandler = async (req, res) => {
 // Get questions by subject
 const getQuestionsBySubjectHandler = async (req, res) => {
   try {
+    const interviewer_id = req.user.id;
     const { subject_id } = req.params;
-    const questions = await getQuestionsBySubject(subject_id);
+    const questions = await getQuestionsBySubject(subject_id,interviewer_id);
     res.status(200).json(questions);
   } catch (error) {
     res.status(500).json({ message: 'Failed to get questions', error: error.message });

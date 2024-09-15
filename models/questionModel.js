@@ -8,8 +8,8 @@ const createQuestion = async (question_text, subject_id, interviewer_id = null) 
   return result.rows[0];
 };
 
-const getQuestionsBySubject = async (subject_id) => {
-  const result = await pool.query('SELECT * FROM questions WHERE subject_id = $1', [subject_id]);
+const getQuestionsBySubject = async (subject_id,interviewer_id) => {
+  const result = await pool.query('SELECT * FROM questions WHERE subject_id = $1 AND interviewer_id=$2', [subject_id,interviewer_id]);
   return result.rows;
 };
 

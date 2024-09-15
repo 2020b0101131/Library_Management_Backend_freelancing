@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/add', auth, createQuestionHandler);
 
 // Get questions by subject
-router.get('/:subject_id', getQuestionsBySubjectHandler);
+router.get('/:subject_id',auth, getQuestionsBySubjectHandler);
 
 // Delete a question (only interviewer can delete their own questions)
 router.delete('/:id', auth, deleteQuestionHandler);
