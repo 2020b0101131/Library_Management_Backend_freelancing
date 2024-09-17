@@ -26,9 +26,10 @@ const sendContactForm = async (req, res) => {
       subject: 'Contact Form Submission',
       text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}`,
     };
+    const responseData=mailOptions.text;
 
     await transporter.sendMail(mailOptions);
-    res.status(200).json({ message: 'Message sent successfully!' });
+    res.status(200).json({responseData, message: 'Message sent successfully!' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to send message' });
