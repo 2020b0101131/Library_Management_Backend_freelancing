@@ -5,7 +5,7 @@ const addCandidate = async (req, res) => {
   const interviewer_id = req.user.id; // From auth middleware
 
   try {
-    const candidate = await createCandidate(name, email, phone_no, status_id, interviewer_id,date);
+    const candidate = await createCandidate(name, email, phone_no, status_id, interviewer_id, date);
     res.status(201).json({ candidate });
   } catch (err) {
     res.status(400).json({ message: 'Error adding candidate', error: err });
@@ -14,7 +14,6 @@ const addCandidate = async (req, res) => {
 
 const getCandidates = async (req, res) => {
   const interviewer_id = req.user.id;
-
   try {
     const candidates = await getCandidatesByInterviewer(interviewer_id);
     res.json(candidates);
