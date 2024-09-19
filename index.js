@@ -7,12 +7,14 @@ const statusRoutes = require('./routes/statusRoutes');      // Import status rou
 const subjectRoutes = require('./routes/subjectRoutes');    // Import subject routes
 const contactRoutes = require('./routes/contactRoutes');    // Import subject routes
 const dashboardRoutes = require('./routes/dashboardRoutes');// Import dashboard routes
-
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+// Serve the uploads directory as static
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Middleware (e.g., authentication)
 const auth = require('./middleware/authMiddleware');
