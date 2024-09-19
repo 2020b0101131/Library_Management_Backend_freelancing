@@ -1,4 +1,4 @@
-const { createProfile, getProfileByInterviewer } = require('../models/dashboardModel');
+const { updateProfileById, getProfileByInterviewer } = require('../models/dashboardModel');
 const multer = require('multer');
 const path = require('path');
 
@@ -28,20 +28,7 @@ const storage = multer.diskStorage({
     }
   });
 
-  
-const addProfile = async (req, res) => {
-  const { username, bio, email} = req.body;
-  const interviewer_id = req.user.id; // From auth middleware
-    // Handle image upload
-    const img = req.file ? `/uploads/${req.file.filename}` : null;
-
-  try {
-    const candidate = await createProfile(username, bio, email, img, interviewer_id);
-    res.status(201).json({ candidate });
-  } catch (err) {
-    res.status(400).json({ message: 'Error adding candidate', error: err });
-  }
-};
+ 
 
 const getProfile = async (req, res) => {
   const interviewer_id = req.user.id;
@@ -53,42 +40,24 @@ const getProfile = async (req, res) => {
   }
 };
 
-// const getSingleCandidates = async (req, res) => {
-//   const interviewer_id = req.user.id;
-//   const candidate_id = req.params.id;
 
-//   try {
-//     const candidates = await getSingleCandidatesByInterviewer(interviewer_id,candidate_id);
-//     res.json(candidates);
-//   } catch (err) {
-//     res.status(400).json({ message: 'Error fetching candidates', error: err });
-//   }
-// };
-// // Update a candidate by ID
-// const updateCandidate = async (req, res) => {
-//   const { id } = req.params;
-//   const { name, email, phone_no, status_id,date } = req.body;
+// Update a profile by ID
+const updateProfile = async (req, res) => {
+  const id  = req.user.id;
+    //Handle image upload
+    const img = req.file ? `/uploads/${req.file.filename}` : null;
+  const { username, bio } = req.body;
+  console.log(req.body,img,id);
 
-//   try {
-//     const candidate = await updateCandidateById(id, { name, email, phone_no, status_id,date });
-//     if (!candidate) return res.status(404).json({ message: 'Candidate not found' });
-//     res.json(candidate);
-//   } catch (err) {
-//     res.status(400).json({ message: 'Error updating candidate', error: err });
-//   }
-// };
+  try {
+    const profile = await updateProfileById(id, { username,bio, img});
+    if (!profile) return res.status(404).json({ message: 'Profile not found' });
+    res.json(profile);
+  } catch (err) {
+    res.status(400).json({ message: 'Error updating profile', error: err });
+  }
+};
 
-// // Delete a candidate by ID
-// const deleteCandidate = async (req, res) => {
-//   const { id } = req.params;
 
-//   try {
-//     const result = await deleteCandidateById(id);
-//     if (result.deletedCount === 0) return res.status(404).json({ message: 'Candidate not found' });
-//     res.json({ message: 'Candidate deleted' });
-//   } catch (err) {
-//     res.status(400).json({ message: 'Error deleting candidate', error: err });
-//   }
-// };
 
-module.exports = { addProfile,  upload, getProfile};
+module.exports = { updateProfile,  upload, getProfile};
