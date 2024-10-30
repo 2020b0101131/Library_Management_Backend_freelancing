@@ -13,6 +13,7 @@ require('dotenv').config();
 const app = express();
 app.use(cors());
 app.use(express.json());
+
 // Serve the uploads directory as static
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -27,6 +28,7 @@ app.use('/api/statuses', statusRoutes);      // Add route for statuses
 app.use('/api/subjects', subjectRoutes);     // Add route for subjects
 app.use('/api/contact', contactRoutes);     // Add route for contact
 app.use('/api/dashboard', dashboardRoutes); // Add route for dashboard
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
