@@ -9,9 +9,13 @@ const createUser = async (name, email, mobileNo, aadharNo, libraryAddress, passw
   return result.rows[0];
 };
 
-const getUserByEmail = async (email) => {
-  const result = await pool.query('SELECT * FROM library_owner WHERE owner_email = $1', [email]);
+const getUserByEmailOrMobile = async (identifier) => {
+  const query = `
+    SELECT * FROM library_owner 
+    WHERE owner_email = $1 OR owner_mobile_no = $1
+  `;
+  const result = await pool.query(query, [identifier]);
   return result.rows[0];
 };
 
-module.exports = { createUser, getUserByEmail };
+module.exports = { createUser, getUserByEmailOrMobile };

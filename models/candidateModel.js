@@ -15,22 +15,22 @@ const getCandidatesByLibrary = async (library_id) => {
   return result.rows;
 };
 
-const getSingleCandidatesByLibrary = async (library_id,candidate_id) => {
-  const result = await pool.query('SELECT * FROM student WHERE library_id = $1 AND id=$2', [library_id,candidate_id]);
+const getSingleCandidatesByLibrary = async (library_id, candidate_id) => {
+  const result = await pool.query('SELECT * FROM student WHERE library_id = $1 AND student_id=$2', [library_id, candidate_id]);
   return result.rows;
 };
 // Update a candidate by ID
 const updateCandidateById = async (id, { name, fatherName, mobileNo, email, aadharNo, address, feeAmount, joinDate }) => {
   const result = await pool.query(
-    'UPDATE student SET name = $1, father_name = $2, mobile_no = $3, email = $4, aadhar_no = $5, address = $6, join_date = $7, fee_amount = $8, WHERE student_id = $9 RETURNING *',
-    [name, fatherName, mobileNo, email, aadharNo, address, libraryId, joinDate, feeAmount, isActive, id]
+    'UPDATE student SET name = $1, father_name = $2, mobile_no = $3, email = $4, aadhar_no = $5, address = $6, join_date = $7, fee_amount = $8 WHERE student_id = $9 RETURNING *',
+    [name, fatherName, mobileNo, email, aadharNo, address, joinDate, feeAmount, id]
   );
   return result.rows[0];
 };
 
 // Delete a candidate by ID
 const deleteCandidateById = async (id) => {
-  const result = await pool.query('DELETE FROM student WHERE id = $1 RETURNING *', [id]);
+  const result = await pool.query('DELETE FROM student WHERE student_id = $1 RETURNING *', [id]);
   return result.rows[0];
 };
 

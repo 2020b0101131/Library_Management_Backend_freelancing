@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { createUser, getUserByEmail } = require('../models/userModel');
+const { createUser, getUserByEmailOrMobile } = require('../models/userModel');
 require('dotenv').config();
 
 const register = async (req, res) => {
@@ -21,16 +21,16 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
-
-  const user = await getUserByEmail(email);
+  const { identifier, password } = req.body;
+  const user = await getUserByEmailOrMobile(identifier);
+  console.log("user::",user)
   if (!user) return res.status(400).json({ message: 'Invalid credentials' });
 
   const isMatch = await bcrypt.compare(password, user.owner_password);
   if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
   // Generate a JWT token
-  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  const token = jwt.sign({ id: user.library_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
   res.json({ success: true, token,user: {
     id: user.id,
     name: user.library_name, 
